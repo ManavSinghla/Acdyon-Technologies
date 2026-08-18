@@ -1,57 +1,77 @@
 import React from 'react'
-import { Terminal, Github, Heart, Radio, Shield, Code } from 'lucide-react'
+import { Terminal, Github, Radio, ArrowUpRight } from 'lucide-react'
 
 export default function Footer({ onTriggerEasterEgg }) {
+  const footerLinks = [
+    { name: 'Playground', href: '#playground' },
+    { name: 'Architecture', href: '#architecture' },
+    { name: 'Capabilities', href: '#features' },
+    { name: 'Benchmarks', href: '#benchmarks' },
+    { name: 'Decisions', href: '#decisions' },
+  ]
+
   return (
-    <footer className="border-t border-surface-border bg-white dark:bg-surface-900 text-gray-600 dark:text-gray-400 py-12 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          
-          {/* Logo & Description */}
+    <footer className="relative border-t border-white/5 bg-white/30 dark:bg-surface-950/80 backdrop-blur-xl">
+      {/* Top border gradient */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-500/40 to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+
+          {/* Brand */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-cyan-400 text-white font-mono font-bold text-xs">
-              PO
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 shadow-glow-sm flex items-center justify-center">
+              <Terminal className="w-5 h-5 text-white" />
             </div>
             <div>
-              <span className="text-sm font-bold text-foreground font-sans">
-                PulseOps Engine
-              </span>
-              <p className="text-xs text-gray-500 font-mono">
-                Built for Acdyon Technologies Frontend Assessment
-              </p>
+              <div className="font-extrabold text-base font-display">
+                <span className="text-foreground">Pulse</span>
+                <span className="text-gradient-cyan">Ops</span>
+              </div>
+              <p className="text-[11px] text-gray-500 font-mono">Acdyon Technologies Assessment</p>
             </div>
           </div>
 
-          {/* Quick links & Easter Egg Trigger */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-mono">
-            <a href="#playground" className="hover:text-foreground transition-colors">Playground</a>
-            <a href="#architecture" className="hover:text-foreground transition-colors">Architecture</a>
-            <a href="#features" className="hover:text-foreground transition-colors">Capabilities</a>
-            <a href="#benchmarks" className="hover:text-foreground transition-colors">Benchmarks</a>
-            <a href="#decisions" className="hover:text-foreground transition-colors">DECISIONS.md</a>
+          {/* Navigation */}
+          <nav className="flex flex-wrap items-center justify-center gap-1" aria-label="Footer navigation">
+            {footerLinks.map(link => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-500 hover:text-foreground hover:bg-gray-100 dark:hover:bg-white/[0.04] rounded-lg transition-colors font-mono"
+              >
+                {link.name}
+              </a>
+            ))}
             <button
               onClick={onTriggerEasterEgg}
-              className="text-cyan-500 hover:text-cyan-400 hover:underline flex items-center gap-1 focus:outline-none"
+              className="px-3 py-1.5 text-xs font-medium text-cyan-500 hover:text-cyan-400 hover:bg-cyan-500/5 rounded-lg transition-colors font-mono flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
             >
               <Radio className="w-3 h-3 animate-pulse" />
-              <span>Dev Terminal [Secret]</span>
+              <span>Dev Console</span>
             </button>
-          </div>
+          </nav>
 
-          {/* Copyright & Honest note */}
-          <div className="flex items-center gap-4 text-xs font-mono text-gray-500">
-            <span>MIT License</span>
-            <span>•</span>
-            <span>Zero Fake Logos</span>
+          {/* Right meta */}
+          <div className="flex items-center gap-3 text-xs font-mono text-gray-500">
+            <span>Zero Fake Metrics</span>
+            <span className="text-gray-300 dark:text-gray-700">·</span>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1 hover:text-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded"
+            >
+              <Github className="w-3.5 h-3.5" />
+              <span>GitHub</span>
+            </a>
           </div>
-
         </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-white/5 text-center text-xs text-gray-400 font-mono">
-          © {new Date().getFullYear()} PulseOps Engineering. Crafted with React, Tailwind CSS, & Taste.
+        {/* Bottom row */}
+        <div className="mt-8 pt-6 border-t border-gray-100/60 dark:border-white/[0.04] text-center text-xs text-gray-400 font-mono">
+          © {new Date().getFullYear()} PulseOps Engine · React + Tailwind CSS · Built with care, not shortcuts.
         </div>
-
       </div>
     </footer>
   )

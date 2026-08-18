@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ThemeProvider } from './context/ThemeContext'
+import HeroCanvas from './components/HeroCanvas'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import InteractivePlayground from './components/InteractivePlayground'
@@ -10,81 +11,50 @@ import DecisionsSection from './components/DecisionsSection'
 import Footer from './components/Footer'
 import EasterEggModal from './components/EasterEggModal'
 
-export default function App() {
-  const [easterEggOpen, setEasterEggOpen] = useState(false)
-  const [konamiSequence, setKonamiSequence] = useState([])
+const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
 
-  // Konami Code detector: [Up, Up, Down, Down, Left, Right, Left, Right, B, A]
-  const KONAMI_CODE = [
-    'ArrowUp',
-    'ArrowUp',
-    'ArrowDown',
-    'ArrowDown',
-    'ArrowLeft',
-    'ArrowRight',
-    'ArrowLeft',
-    'ArrowRight',
-    'b',
-    'a'
-  ]
+export default function App() {
+  const [eggOpen, setEggOpen] = useState(false)
+  const [seq, setSeq] = useState([])
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      const key = e.key.toLowerCase() === 'b' ? 'b' : e.key.toLowerCase() === 'a' ? 'a' : e.key
-      
-      setKonamiSequence((prevSequence) => {
-        const nextSequence = [...prevSequence, key].slice(-KONAMI_CODE.length)
-        const isMatch = nextSequence.every((val, index) => val === KONAMI_CODE[index])
-        
-        if (isMatch) {
-          setEasterEggOpen(true)
+    const handler = (e) => {
+      const key = ['b','a'].includes(e.key.toLowerCase()) ? e.key.toLowerCase() : e.key
+      setSeq(prev => {
+        const next = [...prev, key].slice(-KONAMI.length)
+        if (next.length === KONAMI.length && next.every((v, i) => v === KONAMI[i])) {
+          setEggOpen(true)
           return []
         }
-        return nextSequence
+        return next
       })
     }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
   }, [])
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-background text-foreground flex flex-col font-sans transition-colors duration-300">
-        
-        {/* Navigation Bar */}
-        <Navbar onOpenEasterEgg={() => setEasterEggOpen(true)} />
+      <div className="min-h-screen bg-background text-foreground flex flex-col font-sans transition-colors duration-300 overflow-x-hidden">
 
-        {/* Main Content Sections */}
-        <main className="flex-grow">
-          {/* Hero Section */}
+        {/* Animated particle canvas background */}
+        <HeroCanvas />
+
+        {/* Navigation */}
+        <Navbar onOpenEasterEgg={() => setEggOpen(true)} />
+
+        <main className="flex-grow relative z-10">
           <Hero onExploreDemo={() => {}} />
-
-          {/* Interactive Ingestion Playground */}
           <InteractivePlayground />
-
-          {/* Architecture & Pipeline Deep Dive */}
           <ArchitectureSection />
-
-          {/* Bento Grid Capabilities */}
           <BentoFeatures />
-
-          {/* Benchmarks Comparison Table */}
           <BenchmarkComparison />
-
-          {/* Written Decisions Section (Section 3 of PDF) */}
           <DecisionsSection />
         </main>
 
-        {/* Footer */}
-        <Footer onTriggerEasterEgg={() => setEasterEggOpen(true)} />
+        <Footer onTriggerEasterEgg={() => setEggOpen(true)} />
 
-        {/* Easter Egg Bonus Modal */}
-        <EasterEggModal 
-          isOpen={easterEggOpen} 
-          onClose={() => setEasterEggOpen(false)} 
-        />
-
+        <EasterEggModal isOpen={eggOpen} onClose={() => setEggOpen(false)} />
       </div>
     </ThemeProvider>
   )
